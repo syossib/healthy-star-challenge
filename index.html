@@ -16,8 +16,10 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 .sync-indicator:hover{opacity:1;background:rgba(255,255,255,.25)}
 .sync-indicator .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .sync-indicator .dot.ok{background:#70e000}
+.sync-indicator .dot.readonly{background:#90e0ef}
 .sync-indicator .dot.off{background:#ff6b6b}
-.sync-indicator .dot.syncing{background:#f7c948;animation:pulse 1s infinite}
+.sync-indicator .dot.syncing{background:#f7c948;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .star-counter{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:24px;box-shadow:var(--shadow);flex-wrap:wrap}
 .star-counter .total{font-size:3em;font-weight:800;color:var(--gold-dark)}
 .star-counter .label{font-size:1.2em;color:var(--text-light)}
@@ -79,8 +81,10 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 .tips{list-style:none;display:flex;flex-direction:column;gap:10px}
 .tips li{padding:12px 16px;background:#f0f7ff;border-radius:10px;border-right:4px solid var(--blue);font-size:.95em;line-height:1.5}
 .actions{text-align:center;margin-top:8px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.reset-btn{padding:10px 24px;border-radius:10px;border:2px solid var(--red);background:#fff;color:var(--red);font-size:.95em;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
+.reset-btn,.settings-btn{padding:10px 24px;border-radius:10px;border:2px solid var(--red);background:#fff;color:var(--red);font-size:.95em;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
 .reset-btn:hover{background:var(--red);color:#fff}
+.settings-btn{border-color:var(--purple);color:var(--purple)}
+.settings-btn:hover{background:var(--purple);color:#fff}
 .week-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:24px}
 .week-nav button{padding:8px 16px;border-radius:10px;border:2px solid #ddd;background:var(--card);cursor:pointer;font-size:1em;font-weight:600;transition:all .3s;font-family:inherit}
 .week-nav button:hover{border-color:var(--blue);background:var(--blue-light)}
@@ -93,19 +97,23 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.active{display:flex}
 .modal{background:#fff;border-radius:var(--radius);max-width:550px;width:100%;max-height:85vh;overflow-y:auto;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,.3);direction:rtl}
-.modal h3{font-size:1.3em;margin-bottom:16px;color:var(--purple)}
+.modal h3{font-size:1.3em;margin-bottom:12px;color:var(--purple)}
 .modal-close{float:left;background:none;border:none;font-size:1.5em;cursor:pointer;color:var(--text-light);padding:0 4px}
 .modal-close:hover{color:var(--red)}
-.modal input[type=password]{width:100%;padding:12px 14px;border:2px solid #ddd;border-radius:10px;font-size:1em;font-family:monospace;direction:ltr;text-align:left;margin:12px 0}
-.modal input[type=password]:focus{border-color:var(--purple);outline:none}
+.modal input[type=password],.modal input[type=text]{width:100%;padding:12px 14px;border:2px solid #ddd;border-radius:10px;font-size:1em;font-family:monospace;direction:ltr;text-align:left;margin:8px 0}
+.modal input:focus{border-color:var(--purple);outline:none}
 .modal-btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:1em;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px}
 .modal-btn.primary{background:var(--purple);color:#fff}
 .modal-btn.primary:hover{background:#667eea}
-.modal-btn.danger{background:#fff;color:var(--red);border:2px solid var(--red);margin-top:16px}
+.modal-btn.secondary{background:#f0f0f0;color:var(--text);border:2px solid #ddd}
+.modal-btn.secondary:hover{background:#e0e0e0}
+.modal-btn.danger{background:#fff;color:var(--red);border:2px solid var(--red);margin-top:16px;font-size:.9em}
 .modal-btn.danger:hover{background:var(--red);color:#fff}
-.setup-steps{padding:0 20px 0 0;margin:16px 0}
-.setup-steps li{margin-bottom:12px;line-height:1.6}
-.setup-steps code{background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:.9em;direction:ltr;display:inline-block}
+.mode-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.85em;font-weight:700;margin:8px 0}
+.mode-badge.rw{background:#d4edda;color:var(--green)}
+.mode-badge.ro{background:#cce5ff;color:var(--blue)}
+.mode-badge.off{background:#f8d7da;color:var(--red)}
+.share-box{background:#f8f9fa;border:2px dashed #ddd;border-radius:10px;padding:12px;margin:12px 0;text-align:center;font-size:.9em;word-break:break-all;direction:ltr}
 @media(max-width:600px){
 .header h1{font-size:1.5em}
 .star-counter .total{font-size:2.2em}
@@ -122,7 +130,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 <p>צוברים כוכבי אנרגיה, שומרים על איזון ומגיעים לפרס!</p>
 <button class="sync-indicator" onclick="showSettingsModal()" title="הגדרות סנכרון">
 <span class="dot off" id="syncDot"></span>
-<span id="syncLabel">לא מחובר</span>
+<span id="syncLabel">...</span>
 </button>
 </div>
 <div class="week-nav">
@@ -182,7 +190,8 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 </ul>
 </div>
 <div class="actions">
-<button class="reset-btn" onclick="resetAll()">&#128465;&#65039; איפוס כל הנתונים</button>
+<button class="settings-btn" onclick="showSettingsModal()">&#9881;&#65039; הגדרות</button>
+<button class="reset-btn" onclick="resetAll()">&#128465;&#65039; איפוס</button>
 </div>
 <br>
 </div>
@@ -191,20 +200,9 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 <div class="modal-overlay" id="settingsModal">
 <div class="modal">
 <button class="modal-close" onclick="hideSettingsModal()">&times;</button>
-<h3>&#128272; הגדרות סנכרון</h3>
-<p style="margin-bottom:8px">כדי שכל המשפחה תראה את אותם הנתונים מכל מכשיר, צריך <strong>GitHub Token</strong> (פעם אחת לכל מכשיר):</p>
-<ol class="setup-steps">
-<li>היכנסו ל-<a href="https://github.com/settings/tokens?type=beta" target="_blank" style="color:var(--purple)">github.com/settings/tokens</a></li>
-<li>לחצו <strong>"Generate new token"</strong></li>
-<li>תנו שם (למשל "healthy star"), בחרו תפוגה של 90 יום</li>
-<li>תחת <strong>Repository access</strong> בחרו <strong>"Only select repositories"</strong> ובחרו את <code>healthy-star-challenge</code></li>
-<li>תחת <strong>Permissions</strong> &larr; <strong>Repository permissions</strong> &larr; <strong>Contents</strong>: בחרו <strong>"Read and write"</strong></li>
-<li>לחצו <strong>"Generate token"</strong> והעתיקו</li>
-</ol>
-<input type="password" id="tokenInput" placeholder="github_pat_xxxxx..." dir="ltr">
-<button class="modal-btn primary" onclick="saveToken()">&#128190; שמור ועדכן</button>
-<div id="tokenStatus" style="text-align:center;margin-top:12px;font-size:.9em"></div>
-<button class="modal-btn danger" onclick="clearToken()">&#128465; מחק Token מהמכשיר</button>
+<h3>&#9881;&#65039; הגדרות סנכרון</h3>
+
+<div id="settingsContent"></div>
 </div>
 </div>
 
@@ -214,8 +212,9 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg
 <script>
 var REPO_OWNER='syossib';
 var REPO_NAME='healthy-star-challenge';
-var DATA_PATH='data.json';
-var API_BASE='https://api.github.com/repos/'+REPO_OWNER+'/'+REPO_NAME+'/contents/'+DATA_PATH;
+var DATA_FILE='data.json';
+var API_BASE='https://api.github.com/repos/'+REPO_OWNER+'/'+REPO_NAME+'/contents/'+DATA_FILE;
+var RAW_URL='https://raw.githubusercontent.com/'+REPO_OWNER+'/'+REPO_NAME+'/main/'+DATA_FILE;
 
 var DAYS=['\u05E8\u05D0\u05E9\u05D5\u05DF','\u05E9\u05E0\u05D9','\u05E9\u05DC\u05D9\u05E9\u05D9','\u05E8\u05D1\u05D9\u05E2\u05D9','\u05D7\u05DE\u05D9\u05E9\u05D9','\u05E9\u05D9\u05E9\u05D9','\u05E9\u05D1\u05EA'];
 var TASKS=[
@@ -229,15 +228,8 @@ var currentWeek=0,currentDay=0,data={weeks:[]},fileSha=null,syncing=false,pushTi
 var ghToken=localStorage.getItem('healthyStar_ghToken')||'';
 
 function getDefaultWeek(){return DAYS.map(function(){return{tasks:{},candy:{free:false,extra:0,big:0}}})}
-
-function loadLocalData(){
-try{var s=localStorage.getItem('healthyStarData');if(s)return JSON.parse(s)}catch(e){}
-return{weeks:[getDefaultWeek()]};
-}
-
-function saveLocalData(){
-localStorage.setItem('healthyStarData',JSON.stringify(data));
-}
+function loadLocalData(){try{var s=localStorage.getItem('healthyStarData');if(s)return JSON.parse(s)}catch(e){}return{weeks:[getDefaultWeek()]}}
+function saveLocalData(){localStorage.setItem('healthyStarData',JSON.stringify(data))}
 
 function saveData(){
 saveLocalData();
@@ -269,24 +261,48 @@ function resetAll(){if(confirm('\u05D4\u05D0\u05DD \u05D0\u05EA/\u05D4 \u05D1\u0
 function renderSyncIndicator(){
 var dot=document.getElementById('syncDot');
 var label=document.getElementById('syncLabel');
-if(!ghToken){dot.className='dot off';label.textContent='\u05DC\u05D0 \u05DE\u05D7\u05D5\u05D1\u05E8';return}
 if(syncing){dot.className='dot syncing';label.textContent='\u05DE\u05E1\u05E0\u05DB\u05E8\u05DF...';return}
-dot.className='dot ok';label.textContent='\u05DE\u05D7\u05D5\u05D1\u05E8';
+if(ghToken){dot.className='dot ok';label.textContent='\u05DE\u05D7\u05D5\u05D1\u05E8';return}
+dot.className='dot readonly';label.textContent='\u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05DC\u05D1\u05D3';
 }
 
-function pullFromGitHub(){
-if(!ghToken)return Promise.resolve(false);
+/* READ: public, no auth needed */
+function pullFromCloud(){
 syncing=true;renderSyncIndicator();
-return fetch(API_BASE,{headers:{'Authorization':'Bearer '+ghToken,'Accept':'application/vnd.github.v3+json'}})
+return fetch(RAW_URL+'?t='+Date.now())
+.then(function(r){
+if(r.status===404){syncing=false;renderSyncIndicator();return false}
+if(!r.ok)throw new Error('HTTP '+r.status);
+return r.json();
+})
+.then(function(remoteData){
+if(remoteData&&remoteData.weeks&&remoteData.weeks.length>0){
+data=remoteData;
+saveLocalData();
+lastTotal=getTotalStars();
+}
+syncing=false;renderSyncIndicator();
+return true;
+})
+.catch(function(e){
+console.log('Pull (public) failed, trying API...',e.message);
+return pullFromCloudAPI();
+});
+}
+
+function pullFromCloudAPI(){
+var headers={'Accept':'application/vnd.github.v3+json'};
+if(ghToken)headers['Authorization']='Bearer '+ghToken;
+return fetch(API_BASE,{headers:headers})
 .then(function(r){
 if(r.status===404){syncing=false;renderSyncIndicator();return false}
 if(!r.ok)throw new Error('HTTP '+r.status);
 return r.json();
 })
 .then(function(result){
-if(!result)return false;
+if(!result){syncing=false;renderSyncIndicator();return false}
 fileSha=result.sha;
-var decoded=atob(result.content.replace(/\n/g,''));
+var decoded=decodeURIComponent(escape(atob(result.content.replace(/\n/g,''))));
 var remoteData=JSON.parse(decoded);
 if(remoteData&&remoteData.weeks&&remoteData.weeks.length>0){
 data=remoteData;
@@ -303,21 +319,31 @@ return false;
 });
 }
 
-function pushToGitHub(){
+/* WRITE: needs token */
+function pushToCloud(){
 if(!ghToken||syncing)return Promise.resolve();
 syncing=true;renderSyncIndicator();
+
+// First get the SHA (needed for updates)
+var headers={'Authorization':'Bearer '+ghToken,'Accept':'application/vnd.github.v3+json'};
+return fetch(API_BASE,{headers:headers})
+.then(function(r){
+if(r.status===404)return null;
+if(!r.ok)throw new Error('HTTP '+r.status);
+return r.json();
+})
+.then(function(existing){
+if(existing)fileSha=existing.sha;
 var content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
-var body={message:'Update challenge data',content:content};
+var body={message:'Update data',content:content};
 if(fileSha)body.sha=fileSha;
 return fetch(API_BASE,{
 method:'PUT',
 headers:{'Authorization':'Bearer '+ghToken,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
 body:JSON.stringify(body)
+});
 })
 .then(function(r){
-if(r.status===409){
-return pullFromGitHub().then(function(){return pushToGitHub()});
-}
 if(!r.ok)throw new Error('HTTP '+r.status);
 return r.json();
 })
@@ -328,52 +354,88 @@ syncing=false;renderSyncIndicator();
 .catch(function(e){
 console.error('Push error:',e);
 syncing=false;renderSyncIndicator();
+if(e.message.indexOf('409')!==-1){
+return pullFromCloudAPI().then(function(){return pushToCloud()});
+}
 });
 }
 
 function schedulePush(){
 if(!ghToken)return;
 clearTimeout(pushTimer);
-pushTimer=setTimeout(function(){pushToGitHub()},1500);
+pushTimer=setTimeout(function(){pushToCloud()},1500);
 }
 
 /* ========== SETTINGS MODAL ========== */
 function showSettingsModal(){
 document.getElementById('settingsModal').className='modal-overlay active';
-document.getElementById('tokenInput').value=ghToken?'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'+ghToken.slice(-4):'';
-var st=document.getElementById('tokenStatus');
-st.textContent=ghToken?'\u2705 Token \u05E9\u05DE\u05D5\u05E8 \u05D1\u05DE\u05DB\u05E9\u05D9\u05E8 \u05D4\u05D6\u05D4':'\u274C \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8 Token';
-st.style.color=ghToken?'var(--green)':'var(--red)';
+var sc=document.getElementById('settingsContent');
+var mode=ghToken?'rw':'ro';
+var modeText=ghToken?'\u05E7\u05E8\u05D9\u05D0\u05D4 + \u05DB\u05EA\u05D9\u05D1\u05D4':'\u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05DC\u05D1\u05D3';
+var modeEmoji=ghToken?'\u2705':'\uD83D\uDC41\uFE0F';
+var html='<p><strong>\u05DE\u05E6\u05D1:</strong> <span class="mode-badge '+mode+'">'+modeEmoji+' '+modeText+'</span></p>';
+html+='<hr style="margin:16px 0;border:none;border-top:1px solid #eee">';
+
+if(!ghToken){
+html+='<p style="margin-bottom:12px">\u05DB\u05DC \u05D0\u05D7\u05D3 \u05D9\u05DB\u05D5\u05DC \u05DC\u05E8\u05D0\u05D5\u05EA \u05D0\u05EA \u05D4\u05E0\u05EA\u05D5\u05E0\u05D9\u05DD! \u05DB\u05D3\u05D9 <strong>\u05DC\u05E2\u05D3\u05DB\u05DF</strong> (\u05DC\u05E1\u05DE\u05DF \u05DE\u05E9\u05D9\u05DE\u05D5\u05EA/\u05DC\u05D4\u05D5\u05E1\u05D9\u05E3 \u05DE\u05DE\u05EA\u05E7\u05D9\u05DD), \u05D4\u05DB\u05E0\u05D9\u05E1\u05D5 \u05D0\u05EA \u05D4\u05D8\u05D5\u05E7\u05DF \u05E9\u05E7\u05D9\u05D1\u05DC\u05EA\u05DD \u05DE\u05D1\u05DF/\u05D1\u05EA \u05D4\u05DE\u05E9\u05E4\u05D7\u05D4:</p>';
+}else{
+html+='<p>\u2705 \u05D9\u05E9 \u05DC\u05DA Token \u2014 \u05E9\u05D9\u05E0\u05D5\u05D9\u05D9\u05DD \u05E0\u05E9\u05DE\u05E8\u05D9\u05DD \u05D0\u05D5\u05D8\u05D5\u05DE\u05D8\u05D9\u05EA.</p>';
+html+='<p style="margin-top:8px">\u05E9\u05EA\u05E4\u05D5 \u05D0\u05EA \u05D4\u05D8\u05D5\u05E7\u05DF \u05E2\u05DD \u05D1\u05E0\u05D9 \u05D4\u05DE\u05E9\u05E4\u05D7\u05D4 \u05DB\u05D3\u05D9 \u05E9\u05D2\u05DD \u05D4\u05DD \u05D9\u05D5\u05DB\u05DC\u05D5 \u05DC\u05E2\u05D3\u05DB\u05DF:</p>';
+html+='<div class="share-box" id="shareTokenBox">'+ghToken.substring(0,8)+'...'+ghToken.slice(-4)+'</div>';
+html+='<button class="modal-btn secondary" onclick="copyToken()">\uD83D\uDCCB \u05D4\u05E2\u05EA\u05E7 Token \u05DC\u05E9\u05D9\u05EA\u05D5\u05E3</button>';
 }
+
+html+='<input type="text" id="tokenInput" placeholder="\u05D4\u05D3\u05D1\u05D9\u05E7\u05D5 \u05DB\u05D0\u05DF Token..." dir="ltr" autocomplete="off">';
+html+='<button class="modal-btn primary" onclick="saveToken()">\uD83D\uDD13 \u05E9\u05DE\u05D5\u05E8 Token</button>';
+
+if(!ghToken){
+html+='<hr style="margin:20px 0;border:none;border-top:1px solid #eee">';
+html+='<p style="font-size:.9em;color:var(--text-light);margin-bottom:8px"><strong>\u05D0\u05D9\u05DF \u05DC\u05DB\u05DD Token? \u05E6\u05E8\u05D5 \u05D0\u05D7\u05D3 \u05D1\u05E7\u05DC\u05D9\u05E7:</strong></p>';
+html+='<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" style="display:block;text-align:center;padding:12px;background:var(--bg);border-radius:10px;color:var(--purple);font-weight:700;text-decoration:none;border:2px solid var(--purple);margin-bottom:8px">\uD83D\uDD11 \u05E6\u05E8\u05D5 Token \u05D1-GitHub &larr;</a>';
+html+='<div style="font-size:.82em;color:var(--text-light);background:#f8f9fa;padding:12px;border-radius:10px;line-height:1.7">';
+html+='<strong>\u05D4\u05D5\u05E8\u05D0\u05D5\u05EA \u05DE\u05D4\u05D9\u05E8\u05D5\u05EA:</strong><br>';
+html+='1. \u05EA\u05E0\u05D5 \u05E9\u05DD (\u05DC\u05DE\u05E9\u05DC "star challenge")<br>';
+html+='2. Repository access \u2190 Only select \u2190 <strong>healthy-star-challenge</strong><br>';
+html+='3. Permissions \u2190 Contents \u2190 <strong>Read and write</strong><br>';
+html+='4. \u05DC\u05D7\u05E6\u05D5 Generate token \u05D5\u05D4\u05E2\u05EA\u05D9\u05E7\u05D5</div>';
+}
+
+if(ghToken){
+html+='<button class="modal-btn danger" onclick="clearToken()">\uD83D\uDDD1\uFE0F \u05DE\u05D7\u05E7 Token \u05DE\u05D4\u05DE\u05DB\u05E9\u05D9\u05E8</button>';
+}
+sc.innerHTML=html;
+}
+
 function hideSettingsModal(){document.getElementById('settingsModal').className='modal-overlay'}
 document.getElementById('settingsModal').onclick=function(e){if(e.target===this)hideSettingsModal()};
 
 function saveToken(){
-var inp=document.getElementById('tokenInput').value.trim();
-if(!inp||inp.indexOf('\u2022')===0)return;
-if(!inp.startsWith('github_pat_')&&!inp.startsWith('ghp_')){
-showToast('\u274C Token \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF. \u05E6\u05E8\u05D9\u05DA \u05DC\u05D4\u05EA\u05D7\u05D9\u05DC \u05D1-github_pat_ \u05D0\u05D5 ghp_',true);
-return;
+var inp=document.getElementById('tokenInput');
+if(!inp)return;
+var val=inp.value.trim();
+if(!val)return;
+if(!val.startsWith('github_pat_')&&!val.startsWith('ghp_')){
+showToast('\u274C Token \u05DC\u05D0 \u05EA\u05E7\u05D9\u05DF',true);return;
 }
-ghToken=inp;
+ghToken=val;
 localStorage.setItem('healthyStar_ghToken',ghToken);
-document.getElementById('tokenInput').value='';
 hideSettingsModal();
 showToast('\u2705 Token \u05E0\u05E9\u05DE\u05E8! \u05DE\u05E1\u05E0\u05DB\u05E8\u05DF...',false);
-pullFromGitHub().then(function(pulled){
-if(!pulled){pushToGitHub()}
+pullFromCloudAPI().then(function(pulled){
+if(!pulled){pushToCloud()}
 render();
 });
 }
 
 function clearToken(){
-if(!confirm('\u05DC\u05DE\u05D7\u05D5\u05E7 \u05D0\u05EA \u05D4-Token \u05DE\u05D4\u05DE\u05DB\u05E9\u05D9\u05E8?'))return;
-ghToken='';
-localStorage.removeItem('healthyStar_ghToken');
-fileSha=null;
-hideSettingsModal();
-render();
-showToast('\u{1F5D1}\uFE0F Token \u05E0\u05DE\u05D7\u05E7',true);
+if(!confirm('\u05DC\u05DE\u05D7\u05D5\u05E7 \u05D0\u05EA \u05D4-Token?'))return;
+ghToken='';localStorage.removeItem('healthyStar_ghToken');
+fileSha=null;hideSettingsModal();render();
+showToast('\uD83D\uDDD1\uFE0F Token \u05E0\u05DE\u05D7\u05E7 \u2014 \u05DE\u05E6\u05D1 \u05E7\u05E8\u05D9\u05D0\u05D4 \u05D1\u05DC\u05D1\u05D3',false);
+}
+
+function copyToken(){
+if(ghToken)navigator.clipboard.writeText(ghToken).then(function(){showToast('\u2705 Token \u05D4\u05D5\u05E2\u05EA\u05E7! \u05E9\u05DC\u05D7\u05D5 \u05DC\u05DE\u05E9\u05E4\u05D7\u05D4',false)});
 }
 
 /* ========== TOAST ========== */
@@ -388,12 +450,11 @@ data=loadLocalData();
 var lastTotal=getTotalStars();
 render();
 
-// Auto-pull from GitHub on load
-if(ghToken){
-pullFromGitHub().then(function(pulled){
-if(pulled){render()}
-});
-}
+// Auto-pull from cloud on load (works without token - public repo!)
+pullFromCloud().then(function(pulled){if(pulled)render()});
+
+// Auto-refresh from cloud every 30 seconds
+setInterval(function(){pullFromCloud().then(function(pulled){if(pulled)render()})},30000);
 </script>
 </body>
 </html>

@@ -62,6 +62,69 @@
           }
         ]
       ]
+    },
+    "נעה": {
+      "emoji": "🦄",
+      "weeks": [
+        [
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          },
+          {
+            "tasks": {},
+            "candy": {
+              "free": false,
+              "extra": 0,
+              "big": 0
+            }
+          }
+        ]
+      ]
     }
   }
 }
